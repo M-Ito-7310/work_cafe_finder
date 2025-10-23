@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint*)",
+      "Bash(npm run build*)",
+      "Bash(npm run dev*)",
+      "Bash(npm run type-check*)",
+      "Bash(npm run format*)",
+      "Bash(npm run db:*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Read(c:/Users/mitoi/Desktop/Projects/work-cafe-finder/**)"
+    ]
+  }
+}
