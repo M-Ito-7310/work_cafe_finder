@@ -51,6 +51,12 @@ export default function MapPage() {
   const [cafes, setCafes] = useState<Cafe[]>([]);
   const [selectedCafe, setSelectedCafe] = useState<Cafe | null>(null);
   const [loading, setLoading] = useState(false);
+  const [currentBounds, setCurrentBounds] = useState<{
+    neLat: number;
+    neLng: number;
+    swLat: number;
+    swLng: number;
+  } | null>(null);
 
   // デバウンス処理
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,6 +67,7 @@ export default function MapPage() {
       swLat: number;
       swLng: number;
     }) => {
+      setCurrentBounds(bounds);
       setLoading(true);
       try {
         const response = await apiClient.getCafes(bounds);
@@ -73,6 +80,13 @@ export default function MapPage() {
     }, 500),
     []
   );
+
+  const handleReportSuccess = () => {
+    // 投稿成功後、地図を再読み込み
+    if (currentBounds) {
+      handleMapMove(currentBounds);
+    }
+  };
 
   return (
     <div className="flex h-screen flex-col">
@@ -102,6 +116,7 @@ export default function MapPage() {
         <CafeDetailModal
           cafe={selectedCafe}
           onClose={() => setSelectedCafe(null)}
+          onReportSuccess={handleReportSuccess}
         />
       )}
     </div>
