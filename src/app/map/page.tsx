@@ -9,7 +9,6 @@ import type { FilterState } from '@/components/map/MapFilters';
 
 // Force dynamic rendering to avoid SSR issues with Leaflet
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
 // SSR無効化
 const MapView = dynamicImport(
