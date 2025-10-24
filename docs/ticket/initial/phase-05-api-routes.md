@@ -1,10 +1,11 @@
 # Phase 5: API Routes実装
 
-**ステータス**: 🔴 未着手
+**ステータス**: 🟡 進行中
 **優先度**: High
 **見積もり時間**: 60-90分
 **実績時間**: _____
 **作成日**: 2025-10-23
+**開始日**: 2025-10-24
 **完了日**: _____
 **担当**: _____
 
@@ -16,22 +17,24 @@
 
 ## ✅ 実装タスク
 
-- [ ] GET /api/cafes - カフェ一覧取得（地図範囲指定、フィルタリング対応）
-- [ ] GET /api/cafes/[id] - カフェ詳細取得（投稿履歴含む）
-- [ ] POST /api/reports - 投稿作成（認証必須）
-- [ ] GET /api/reports - 投稿一覧取得
-- [ ] GET /api/reports/[id] - 投稿詳細取得
-- [ ] エラーハンドリング実装
-- [ ] Zodバリデーション実装
-- [ ] レスポンス型定義
+- [x] GET /api/cafes - カフェ一覧取得（地図範囲指定、フィルタリング対応）
+- [x] GET /api/cafes/[id] - カフェ詳細取得（投稿履歴含む）
+- [x] POST /api/reports - 投稿作成（認証必須）
+- [x] GET /api/reports - 投稿一覧取得
+- [x] GET /api/reports/[id] - 投稿詳細取得（GET /api/reportsに統合）
+- [x] エラーハンドリング実装
+- [x] Zodバリデーション実装
+- [x] レスポンス型定義
 
 ## 📦 成果物
 
-- [ ] src/app/api/cafes/route.ts
-- [ ] src/app/api/cafes/[id]/route.ts
-- [ ] src/app/api/reports/route.ts
-- [ ] src/app/api/reports/[id]/route.ts
-- [ ] すべてのAPIが正しく動作する
+- [x] src/app/api/cafes/route.ts
+- [x] src/app/api/cafes/[id]/route.ts
+- [x] src/app/api/reports/route.ts
+- [x] src/lib/validations/report.ts
+- [x] src/lib/api/errorHandler.ts
+- [x] src/lib/api/client.ts
+- [ ] すべてのAPIが正しく動作する（受入テストで確認）
 
 ## 🧪 テスト確認項目
 
@@ -55,10 +58,24 @@
 
 ## 📝 メモ
 
-{実装時のメモや問題点を記載}
+実装完了：
+- Zodバリデーションスキーマの作成
+- GET /api/cafes - カフェ一覧取得API実装
+- GET /api/cafes/[id] - カフェ詳細取得API実装
+- POST /api/reports - 投稿作成API実装（認証必須）
+- GET /api/reports - 投稿一覧取得API実装
+- エラーハンドリングミドルウェアの作成
+- APIクライアントの作成
+- TypeScript/ESLintエラー修正
+
+コミットハッシュ: 09efed9
+
+次のステップ：
+- localhost での API 動作確認が必要
+- Phase 6（地図統合）で API を利用予定
 
 ---
 
-**Phase完了日**: _____
-**実績時間**: _____
+**Phase完了日**: 2025-10-24（実装完了、受入テスト待ち）
+**実績時間**: 約30分
 **レビュー**: _____
