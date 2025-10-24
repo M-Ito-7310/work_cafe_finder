@@ -5,6 +5,8 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '@/lib/db';
 
 // Skip adapter during build if DATABASE_URL is not set
+const sessionStrategy: 'database' | 'jwt' = process.env.DATABASE_URL ? 'database' : 'jwt';
+
 const authConfig = {
   ...(process.env.DATABASE_URL ? { adapter: DrizzleAdapter(db) } : {}),
   providers: [
@@ -30,7 +32,7 @@ const authConfig = {
     },
   },
   session: {
-    strategy: (process.env.DATABASE_URL ? 'database' : 'jwt') as const,
+    strategy: sessionStrategy,
   },
 };
 
