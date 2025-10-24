@@ -56,38 +56,43 @@ vercel
 
 ### 4. 環境変数の設定
 
-Vercel ダッシュボードの「Settings」→「Environment Variables」で以下を設定：
+**重要:** 環境変数は Vercel ダッシュボードで直接設定します（`vercel.json` には含まれていません）。
+
+#### 設定手順：
+
+1. Vercel プロジェクトダッシュボードで「Settings」タブをクリック
+2. 左サイドバーから「Environment Variables」を選択
+3. 以下の環境変数を1つずつ追加：
 
 #### 必須の環境変数：
 
-```bash
-# Database
-DATABASE_URL=postgresql://username:password@host/database?sslmode=require
+| Name | Value | Environment |
+|------|-------|-------------|
+| `DATABASE_URL` | `postgresql://neondb_owner:npg_yF4EqWNrBJj8@ep-blue-bush-ad2uvqi9-pooler.c-2.us-east-1.aws.neon.tech/workcafe?sslmode=require&channel_binding=require` | Production, Preview, Development |
+| `NEXTAUTH_URL` | `https://work-cafe-finder.vercel.app` | Production のみ |
+| `NEXTAUTH_URL` | `https://work-cafe-finder-git-[branch].vercel.app` | Preview のみ（ブランチ名は実際のものに置き換え） |
+| `NEXTAUTH_URL` | `http://localhost:3000` | Development のみ |
+| `NEXTAUTH_SECRET` | `openssl rand -base64 32` で生成 | Production, Preview, Development |
 
-# NextAuth
-NEXTAUTH_URL=https://work-cafe-finder.vercel.app
-NEXTAUTH_SECRET=your-secret-here
+**NEXTAUTH_SECRET の生成方法:**
+```bash
+openssl rand -base64 32
 ```
+このコマンドで生成された文字列をコピーして使用してください。
 
 #### オプションの環境変数（OAuth を使用する場合）：
 
-```bash
-# Google OAuth
-GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your-google-client-secret
+| Name | Value | Environment |
+|------|-------|-------------|
+| `GOOGLE_CLIENT_ID` | Google Cloud Console で取得 | Production, Preview, Development |
+| `GOOGLE_CLIENT_SECRET` | Google Cloud Console で取得 | Production, Preview, Development |
+| `TWITTER_CLIENT_ID` | Twitter Developer Portal で取得 | Production, Preview, Development |
+| `TWITTER_CLIENT_SECRET` | Twitter Developer Portal で取得 | Production, Preview, Development |
 
-# X (Twitter) OAuth
-TWITTER_CLIENT_ID=your-twitter-client-id
-TWITTER_CLIENT_SECRET=your-twitter-client-secret
-```
-
-**重要:**
-- すべての環境変数を「Production」、「Preview」、「Development」すべてに適用
-- `NEXTAUTH_URL` は本番 URL に変更すること
-- `NEXTAUTH_SECRET` は以下で生成：
-  ```bash
-  openssl rand -base64 32
-  ```
+**注意事項:**
+- 各環境変数を追加する際、「Production」「Preview」「Development」のチェックボックスで適用する環境を選択
+- `NEXTAUTH_URL` は環境ごとに異なる値を設定する必要があります
+- OAuth 変数は、実際に Google/X 認証を使用する場合のみ設定してください（現在は未設定でも動作します）
 
 ### 5. OAuth 設定の更新
 
