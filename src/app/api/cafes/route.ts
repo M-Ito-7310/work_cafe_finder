@@ -22,14 +22,22 @@ export async function GET(request: NextRequest) {
 
     // フィルターの取得
     const filtersParam = searchParams.get('filters');
-    const filters = filtersParam
-      ? {
-          seats: filtersParam.includes('seats'),
-          quiet: filtersParam.includes('quiet'),
-          wifi: filtersParam.includes('wifi'),
-          power: filtersParam.includes('power'),
-        }
-      : undefined;
+    let filters: { seats?: boolean; quiet?: boolean; wifi?: boolean; power?: boolean } | undefined;
+
+    if (filtersParam) {
+      try {
+        const filterObj = JSON.parse(filtersParam);
+        filters = {
+          seats: filterObj.seats === true,
+          quiet: filterObj.quiet === true,
+          wifi: filterObj.wifi === true,
+          power: filterObj.power === true,
+        };
+      } catch {
+        // パース失敗時はフィルターなし
+        filters = undefined;
+      }
+    }
 
     const params: CafesQueryParams = {
       neLat,

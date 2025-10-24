@@ -12,11 +12,7 @@ export class ApiClient {
     });
 
     if (params.filters) {
-      const filters = Object.entries(params.filters)
-        .filter(([, value]) => value)
-        .map(([key]) => key)
-        .join(',');
-      if (filters) query.append('filters', filters);
+      query.append('filters', JSON.stringify(params.filters));
     }
 
     const response = await fetch(`${this.baseUrl}/cafes?${query}`);

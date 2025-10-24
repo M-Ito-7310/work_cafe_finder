@@ -1,44 +1,116 @@
 import { db } from './index';
 import { cafes, reports } from './schema';
-import { eq, and, between, desc, sql } from 'drizzle-orm';
-import type { CafesQueryParams } from '@/types';
+import { eq, and, desc, sql, gte, lte } from 'drizzle-orm';
+import type { CafesQueryParams, Cafe } from '@/types';
 
 /**
  * 地図範囲内のカフェと最新投稿を取得
  */
-export async function getCafesInBounds(params: CafesQueryParams) {
+export async function getCafesInBounds(params: CafesQueryParams): Promise<Cafe[]> {
   const { neLat, neLng, swLat, swLng, filters } = params;
 
-  const conditions: any[] = [
-    between(cafes.latitude, swLat.toString(), neLat.toString()),
-    between(cafes.longitude, swLng.toString(), neLng.toString()),
-  ];
-
-  // フィルター条件の追加
-  if (filters) {
-    if (filters.seats) conditions.push(eq(reports.seatStatus, 'available'));
-    if (filters.quiet) conditions.push(eq(reports.quietness, 'quiet'));
-    if (filters.wifi) conditions.push(eq(reports.wifi, 'fast'));
-    if (filters.power) conditions.push(eq(reports.powerOutlets, true));
-  }
-
-  const result = await db
+  const query = db
     .select({
-      cafe: cafes,
-      latestReport: reports,
+      id: cafes.id,
+      name: cafes.name,
+      address: cafes.address,
+      latitude: cafes.latitude,
+      longitude: cafes.longitude,
+      placeId: cafes.placeId,
+      createdAt: cafes.createdAt,
+      updatedAt: cafes.updatedAt,
+      latestReport: {
+        id: reports.id,
+        userId: reports.userId,
+        seatStatus: reports.seatStatus,
+        quietness: reports.quietness,
+        wifi: reports.wifi,
+        powerOutlets: reports.powerOutlets,
+        comment: reports.comment,
+        createdAt: reports.createdAt,
+        updatedAt: reports.updatedAt,
+      },
     })
     .from(cafes)
     .leftJoin(
       reports,
       and(
-        eq(cafes.id, reports.cafeId),
-        sql`${reports.createdAt} > NOW() - INTERVAL '24 hours'`
+        eq(reports.cafeId, cafes.id),
+        sql`${reports.id} = (
+          SELECT id FROM ${reports}
+          WHERE ${reports.cafeId} = ${cafes.id}
+          ORDER BY ${reports.createdAt} DESC
+          LIMIT 1
+        )`
       )
     )
-    .where(and(...conditions))
-    .orderBy(desc(reports.createdAt));
+    .where(
+      and(
+        gte(cafes.latitude, swLat.toString()),
+        lte(cafes.latitude, neLat.toString()),
+        gte(cafes.longitude, swLng.toString()),
+        lte(cafes.longitude, neLng.toString())
+      )
+    );
 
-  return result;
+  const results = await query;
+
+  // フィルタリング（メモリ上で実施）
+  let filtered = results;
+
+  if (filters) {
+    filtered = results.filter((cafe) => {
+      const report = cafe.latestReport;
+      if (!report) return false;
+
+      // 空席フィルター
+      if (filters.seats && report.seatStatus !== 'available') {
+        return false;
+      }
+
+      // 静かフィルター
+      if (filters.quiet && report.quietness !== 'quiet') {
+        return false;
+      }
+
+      // Wi-Fiフィルター
+      if (filters.wifi && (report.wifi === 'none' || report.wifi === 'slow')) {
+        return false;
+      }
+
+      // 電源フィルター
+      if (filters.power && !report.powerOutlets) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+
+  return filtered.map((row) => ({
+    id: row.id,
+    name: row.name,
+    address: row.address,
+    latitude: parseFloat(row.latitude),
+    longitude: parseFloat(row.longitude),
+    placeId: row.placeId,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    latestReport: row.latestReport
+      ? {
+          id: row.latestReport.id,
+          userId: row.latestReport.userId,
+          cafeId: row.id,
+          seatStatus: row.latestReport.seatStatus,
+          quietness: row.latestReport.quietness,
+          wifi: row.latestReport.wifi,
+          powerOutlets: row.latestReport.powerOutlets,
+          comment: row.latestReport.comment || undefined,
+          createdAt: row.latestReport.createdAt,
+          updatedAt: row.latestReport.updatedAt,
+        }
+      : null,
+  }));
 }
 
 /**
