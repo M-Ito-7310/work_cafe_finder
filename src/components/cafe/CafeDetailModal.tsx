@@ -8,6 +8,7 @@ import { apiClient } from '@/lib/api/client';
 import { ReportCard } from './ReportCard';
 import { ReportForm } from '../report/ReportForm';
 import { getFreshnessLevel } from '@/lib/utils/freshness';
+import { CafeCardSkeleton } from '@/components/ui/Skeleton';
 
 interface CafeDetailModalProps {
   cafe: Cafe;
@@ -59,12 +60,12 @@ export function CafeDetailModal({ cafe, onClose, onReportSuccess }: CafeDetailMo
     <div className="fixed inset-0 z-[2000] flex items-end justify-center md:items-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50"
+        className="absolute inset-0 bg-black/50 animate-fade-in"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-t-2xl md:rounded-2xl bg-white shadow-xl">
+      {/* Modal - モバイルは下から、デスクトップは中央 */}
+      <div className="relative w-full md:max-w-2xl max-h-[90vh] overflow-hidden rounded-t-2xl md:rounded-2xl bg-white shadow-xl animate-slide-up md:animate-fade-in">
         {/* Header */}
         <div className="sticky top-0 z-10 border-b bg-white">
           <div className="px-6 py-4">
@@ -89,7 +90,8 @@ export function CafeDetailModal({ cafe, onClose, onReportSuccess }: CafeDetailMo
               </div>
               <button
                 onClick={onClose}
-                className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                aria-label="モーダルを閉じる"
               >
                 <X size={24} />
               </button>
@@ -131,8 +133,10 @@ export function CafeDetailModal({ cafe, onClose, onReportSuccess }: CafeDetailMo
         <div className="overflow-y-auto p-6" style={{ maxHeight: 'calc(90vh - 180px)' }}>
           {activeTab === 'reports' ? (
             loading ? (
-              <div className="flex justify-center py-8">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+              <div className="space-y-4">
+                <CafeCardSkeleton />
+                <CafeCardSkeleton />
+                <CafeCardSkeleton />
               </div>
             ) : reports.length > 0 ? (
               <div className="space-y-4">

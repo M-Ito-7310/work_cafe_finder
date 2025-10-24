@@ -1,11 +1,24 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { SessionProvider } from '@/components/providers/SessionProvider';
+import { ErrorBoundary } from '@/components/error/ErrorBoundary';
 
 export const metadata: Metadata = {
-  title: 'Work Cafe Finder - 作業できるカフェを見つけよう',
-  description:
-    'リアルタイムで作業可能なカフェを見つけるマップアプリ。コミュニティからの最新情報で、電源・WiFi・混雑状況をチェック。',
+  title: 'WorkCafeFinder - 作業できるカフェを見つけよう',
+  description: 'リアルタイムで作業しやすいカフェを見つけられる地図アプリ。空席状況、Wi-Fi、電源の有無をユーザーが共有。',
+  keywords: ['カフェ', '作業', 'ノマド', 'Wi-Fi', '電源', '地図'],
+  openGraph: {
+    title: 'WorkCafeFinder',
+    description: 'リアルタイムで作業しやすいカフェを見つけよう',
+    type: 'website',
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  themeColor: '#16a34a',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -15,8 +28,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>
-        <SessionProvider>{children}</SessionProvider>
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body className="antialiased">
+        <ErrorBoundary>
+          <SessionProvider>{children}</SessionProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

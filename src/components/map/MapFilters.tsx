@@ -48,12 +48,17 @@ export function MapFilters({ filters, onChange }: MapFiltersProps) {
       {/* Filter Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 rounded-lg bg-white px-4 py-3 shadow-lg transition hover:bg-gray-50"
+        className="flex items-center gap-2 rounded-lg bg-white px-4 py-3 shadow-lg transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+        aria-label="フィルターを開く"
+        aria-expanded={isOpen}
       >
         <Filter size={20} className="text-gray-700" />
         <span className="font-medium text-gray-900">フィルター</span>
         {activeFilterCount > 0 && (
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white">
+          <span
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white"
+            aria-label={`${activeFilterCount}個のフィルターが有効`}
+          >
             {activeFilterCount}
           </span>
         )}
@@ -61,13 +66,14 @@ export function MapFilters({ filters, onChange }: MapFiltersProps) {
 
       {/* Filter Panel */}
       {isOpen && (
-        <div className="mt-2 w-64 rounded-lg bg-white p-4 shadow-lg">
+        <div className="mt-2 w-64 rounded-lg bg-white p-4 shadow-lg animate-fade-in">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="font-semibold text-gray-900">絞り込み条件</h3>
             {activeFilterCount > 0 && (
               <button
                 onClick={clearFilters}
-                className="text-xs text-primary-600 hover:text-primary-700"
+                className="text-xs text-primary-600 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
+                aria-label="フィルターをクリア"
               >
                 クリア
               </button>
