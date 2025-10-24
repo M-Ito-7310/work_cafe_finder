@@ -1,40 +1,43 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import dynamicImport from 'next/dynamic';
 import { Header } from '@/components/layout/Header';
 import { apiClient } from '@/lib/api/client';
 import type { Cafe } from '@/types';
 import type { FilterState } from '@/components/map/MapFilters';
-import '@/lib/utils/leafletConfig';
+
+// Force dynamic rendering to avoid SSR issues with Leaflet
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 // SSR無効化
-const MapView = dynamic(
+const MapView = dynamicImport(
   () => import('@/components/map/MapView').then((mod) => mod.MapView),
   { ssr: false, loading: () => <div className="h-full w-full bg-gray-100" /> }
 );
 
-const CurrentLocationMarker = dynamic(
+const CurrentLocationMarker = dynamicImport(
   () => import('@/components/map/CurrentLocationMarker').then((mod) => mod.CurrentLocationMarker),
   { ssr: false }
 );
 
-const RecenterButton = dynamic(
+const RecenterButton = dynamicImport(
   () => import('@/components/map/RecenterButton').then((mod) => mod.RecenterButton),
   { ssr: false }
 );
 
-const CafeMarker = dynamic(
+const CafeMarker = dynamicImport(
   () => import('@/components/map/CafeMarker').then((mod) => mod.CafeMarker),
   { ssr: false }
 );
 
-const CafeDetailModal = dynamic(
+const CafeDetailModal = dynamicImport(
   () => import('@/components/cafe/CafeDetailModal').then((mod) => mod.CafeDetailModal),
   { ssr: false }
 );
 
-const MapFilters = dynamic(
+const MapFilters = dynamicImport(
   () => import('@/components/map/MapFilters').then((mod) => mod.MapFilters),
   { ssr: false }
 );
