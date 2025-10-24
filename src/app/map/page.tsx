@@ -23,6 +23,16 @@ const RecenterButton = dynamic(
   { ssr: false }
 );
 
+const CafeMarker = dynamic(
+  () => import('@/components/map/CafeMarker').then((mod) => mod.CafeMarker),
+  { ssr: false }
+);
+
+const CafeDetailModal = dynamic(
+  () => import('@/components/cafe/CafeDetailModal').then((mod) => mod.CafeDetailModal),
+  { ssr: false }
+);
+
 // デバウンス関数
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function debounce<T extends (...args: any[]) => any>(
@@ -38,7 +48,8 @@ function debounce<T extends (...args: any[]) => any>(
 }
 
 export default function MapPage() {
-  const [, setCafes] = useState<Cafe[]>([]);
+  const [cafes, setCafes] = useState<Cafe[]>([]);
+  const [selectedCafe, setSelectedCafe] = useState<Cafe | null>(null);
   const [loading, setLoading] = useState(false);
 
   // デバウンス処理
@@ -69,7 +80,13 @@ export default function MapPage() {
       <div className="relative flex-1">
         <MapView onMoveEnd={handleMapMove}>
           <CurrentLocationMarker />
-          {/* CafeMarkerはPhase 7で実装 */}
+          {cafes.map((cafe) => (
+            <CafeMarker
+              key={cafe.id}
+              cafe={cafe}
+              onClick={setSelectedCafe}
+            />
+          ))}
         </MapView>
         <RecenterButton />
 
@@ -79,6 +96,14 @@ export default function MapPage() {
           </div>
         )}
       </div>
+
+      {/* Cafe Detail Modal */}
+      {selectedCafe && (
+        <CafeDetailModal
+          cafe={selectedCafe}
+          onClose={() => setSelectedCafe(null)}
+        />
+      )}
     </div>
   );
 }
