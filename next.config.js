@@ -16,6 +16,12 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
+  // Experimental: Use minimal static generation
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
   // Leaflet requires canvas which is not available in Node.js
   webpack: (config) => {
     config.externals = [...(config.externals || []), { canvas: 'canvas' }];

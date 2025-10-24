@@ -59,7 +59,7 @@ export async function getCafesInBounds(params: CafesQueryParams): Promise<Cafe[]
   let filtered = results;
 
   if (filters) {
-    filtered = results.filter((cafe) => {
+    filtered = results.filter((cafe: typeof results[0]) => {
       const report = cafe.latestReport;
       if (!report) return false;
 
@@ -87,7 +87,7 @@ export async function getCafesInBounds(params: CafesQueryParams): Promise<Cafe[]
     });
   }
 
-  return filtered.map((row) => ({
+  return filtered.map((row: typeof filtered[0]) => ({
     id: row.id,
     name: row.name,
     address: row.address,
