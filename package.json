@@ -19,7 +19,7 @@
     "db:verify": "tsx --env-file=.env.local scripts/verify-db.ts"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.7.3",
+    "@auth/drizzle-adapter": "^1.11.0",
     "@neondatabase/serverless": "^0.10.4",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
