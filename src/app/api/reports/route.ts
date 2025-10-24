@@ -3,6 +3,9 @@ import { getServerSession } from '@/lib/auth/getServerSession';
 import { createReport, getCafeWithReports } from '@/lib/db/queries';
 import { createReportSchema } from '@/lib/validations/report';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     // 認証チェック
