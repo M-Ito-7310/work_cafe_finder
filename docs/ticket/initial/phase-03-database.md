@@ -1,12 +1,13 @@
 # Phase 3: データベース構築
 
-**ステータス**: 🔴 未着手
+**ステータス**: 🟡 進行中
 **優先度**: Critical
 **見積もり時間**: 45-60分
 **実績時間**: _____
 **作成日**: 2025-10-23
+**開始日**: 2025-10-24
 **完了日**: _____
-**担当**: _____
+**担当**: Claude
 
 ---
 
@@ -16,26 +17,27 @@ Neon PostgreSQLとDrizzle ORMの設定を行います。データベーススキ
 
 ## ✅ 実装タスク
 
-- [ ] Neonアカウント作成とデータベース作成
-- [ ] DATABASE_URLを.env.localに設定
-- [ ] Drizzle ORMスキーマ定義（src/lib/db/schema.ts）
-  - [ ] usersテーブル
-  - [ ] cafesテーブル
-  - [ ] reportsテーブル
-  - [ ] NextAuth関連テーブル（accounts, sessions, verification_tokens）
-  - [ ] リレーションシップ定義
-- [ ] Neon接続設定（src/lib/db/index.ts）
-- [ ] データベースクエリ関数（src/lib/db/queries.ts）
-- [ ] マイグレーション生成・実行
-- [ ] シードデータ投入（東京駅周辺のカフェ5-10件）
+- [x] Neonアカウント作成とデータベース作成
+- [x] DATABASE_URLを.env.localに設定
+- [x] Drizzle ORMスキーマ定義（src/lib/db/schema.ts）
+  - [x] usersテーブル
+  - [x] cafesテーブル
+  - [x] reportsテーブル
+  - [x] NextAuth関連テーブル（accounts, sessions, verification_tokens）
+  - [x] リレーションシップ定義
+- [x] Neon接続設定（src/lib/db/index.ts）
+- [x] データベースクエリ関数（src/lib/db/queries.ts）
+- [x] マイグレーション生成・実行
+- [x] シードデータ投入（東京駅周辺のカフェ5件）
 
 ## 📦 成果物
 
-- [ ] src/lib/db/index.ts
-- [ ] src/lib/db/schema.ts
-- [ ] src/lib/db/queries.ts
-- [ ] drizzle/（マイグレーションファイル）
-- [ ] Neon PostgreSQLデータベース（users, cafes, reportsテーブル）
+- [x] src/lib/db/index.ts
+- [x] src/lib/db/schema.ts
+- [x] src/lib/db/queries.ts
+- [x] drizzle/（マイグレーションファイル）
+- [x] Neon PostgreSQLデータベース（users, cafes, reportsテーブル）
+- [x] scripts/seed.ts
 
 ## 🧪 テスト確認項目
 
@@ -58,10 +60,17 @@ Neon PostgreSQLとDrizzle ORMの設定を行います。データベーススキ
 
 ## 📝 メモ
 
-{実装時のメモや問題点を記載}
+- Neon PostgreSQL データベース作成完了
+- DATABASE_URL を .env.local に設定
+- Drizzle ORM スキーマ定義完了（users, cafes, reports, NextAuth テーブル）
+- マイグレーション生成・実行完了
+- シードデータ投入完了（東京駅周辺のカフェ5件）
+- dotenv パッケージ追加
+
+コミットハッシュ: c25e83f
 
 ---
 
-**Phase完了日**: _____
-**実績時間**: _____
-**レビュー**: _____
+**Phase完了日**: 2025-10-24
+**実績時間**: 約45分
+**レビュー**: 受入テスト待ち
